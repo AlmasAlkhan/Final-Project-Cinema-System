@@ -1,0 +1,105 @@
+syntax = "proto3";
+
+package movie;
+
+option go_package = "github.com/yourteam/cinema-system/movie-service/proto/movie";
+
+service MovieService {
+  rpc CreateMovie(CreateMovieRequest) returns (MovieResponse);
+  rpc GetMovie(GetMovieRequest) returns (MovieResponse);
+  rpc UpdateMovie(UpdateMovieRequest) returns (MovieResponse);
+  rpc DeleteMovie(DeleteMovieRequest) returns (Empty);
+  rpc ListMovies(ListMoviesRequest) returns (ListMoviesResponse);
+  rpc CreateShowtime(CreateShowtimeRequest) returns (ShowtimeResponse);
+  rpc GetShowtime(GetShowtimeRequest) returns (ShowtimeResponse);
+  rpc DeleteShowtime(DeleteShowtimeRequest) returns (Empty);
+  rpc ListShowtimes(ListShowtimesRequest) returns (ListShowtimesResponse);
+  rpc GetHallLayout(GetHallLayoutRequest) returns (HallLayoutResponse);
+  rpc ListHalls(ListHallsRequest) returns (ListHallsResponse);
+  rpc Health(HealthRequest) returns (HealthResponse);
+}
+
+message Empty {}
+
+message HealthRequest {}
+message HealthResponse { string status = 1; }
+
+message CreateMovieRequest {
+  string title = 1;
+  string description = 2;
+  int32 duration_min = 3;
+  string poster_url = 4;
+  string release_date = 5;
+}
+
+message GetMovieRequest { int64 id = 1; }
+
+message UpdateMovieRequest {
+  int64 id = 1;
+  string title = 2;
+  string description = 3;
+  int32 duration_min = 4;
+  string poster_url = 5;
+  string release_date = 6;
+}
+
+message DeleteMovieRequest { int64 id = 1; }
+
+message ListMoviesRequest {
+  int32 page = 1;
+  int32 page_size = 2;
+}
+
+message MovieResponse {
+  int64 id = 1;
+  string title = 2;
+  string description = 3;
+  int32 duration_min = 4;
+  string poster_url = 5;
+  string release_date = 6;
+  string created_at = 7;
+  bool cache_hit = 8;
+}
+
+message ListMoviesResponse {
+  repeated MovieResponse movies = 1;
+  int32 total = 2;
+}
+
+message CreateShowtimeRequest {
+  int64 movie_id = 1;
+  int64 hall_id = 2;
+  string start_time = 3;
+  int32 duration_min = 4;
+  double price = 5;
+}
+
+message GetShowtimeRequest { int64 id = 1; }
+message DeleteShowtimeRequest { int64 id = 1; }
+message ListShowtimesRequest { int64 movie_id = 1; }
+
+message ShowtimeResponse {
+  int64 id = 1;
+  int64 movie_id = 2;
+  int64 hall_id = 3;
+  string start_time = 4;
+  string end_time = 5;
+  double price = 6;
+}
+
+message ListShowtimesResponse {
+  repeated ShowtimeResponse showtimes = 1;
+}
+
+message GetHallLayoutRequest { int64 hall_id = 1; }
+message HallLayoutResponse {
+  int64 id = 1;
+  string name = 2;
+  int32 rows = 3;
+  int32 cols = 4;
+}
+
+message ListHallsRequest {}
+message ListHallsResponse {
+  repeated HallLayoutResponse halls = 1;
+}
